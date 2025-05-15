@@ -10,8 +10,11 @@ use std::fmt;
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 pub enum ToolChoiceType {
     None,
+    #[serde(alias="auto", alias="AUTO")]
     Auto,
+    #[serde(alias="required", alias="REQUIRED")]
     Required,
+    #[serde(alias="toolchoice", alias="TOOLCHOICE", alias="tool_choice")]
     ToolChoice { tool: Tool },
 }
 
