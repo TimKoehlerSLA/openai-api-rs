@@ -53,6 +53,8 @@ pub struct ChatCompletionRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(serialize_with = "serialize_tool_choice")]
     pub tool_choice: Option<ToolChoiceType>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub extra_body: Option<HashMap<String, Value>>,
 }
 
 impl ChatCompletionRequest {
@@ -75,6 +77,7 @@ impl ChatCompletionRequest {
             tools: None,
             parallel_tool_calls: None,
             tool_choice: None,
+            extra_body: None,
         }
     }
 }
@@ -95,7 +98,8 @@ impl_builder_methods!(
     seed: i64,
     tools: Vec<Tool>,
     parallel_tool_calls: bool,
-    tool_choice: ToolChoiceType
+    tool_choice: ToolChoiceType,
+    extra_body: HashMap<String, Value>
 );
 
 #[derive(Debug, Deserialize, Serialize, Clone, PartialEq, Eq)]
@@ -188,6 +192,11 @@ impl<'de> Deserialize<'de> for Content {
 
         deserializer.deserialize_any(ContentVisitor)
     }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ChatTemplateKwargs {
+    pub enable_thinking: bool,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone, PartialEq, Eq)]
